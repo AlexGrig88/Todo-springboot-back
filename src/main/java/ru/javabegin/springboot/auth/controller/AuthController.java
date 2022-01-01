@@ -131,10 +131,16 @@ public class AuthController {
         activity.setUser(user);
         activity.setUuid(UUID.randomUUID().toString()); // уникальный UUID - нужен для активации пользователя
 
+        //отключаем пока отправку писем для продакшена, т.к. нет своего хостинга и посчтового домена и не настроен mailgun
+        //активируем аккаунт автоматически
+        activity.setActivated(true);
+
         userService.register(user, activity);
 
         // отправляем письмо о том, что нужно активировать аккаунт (выполняется в параллельном потоке с помощью @Async, чтобы пользователь не ждал)
-        emailService.sendActivationEmail(user.getEmail(), user.getUsername(), activity.getUuid());
+        //отключаем пока отправку писем для продакшена, т.к. нет своего хостинга и посчтового домена и не настроен mailgun
+        //emailService.sendActivationEmail(user.getEmail(), user.getUsername(), activity.getUuid());
+
 
         return ResponseEntity.ok().build(); // просто отправляем статус 200-ОК (без каких-либо данных) - значит регистрация выполнилась успешно
     }
